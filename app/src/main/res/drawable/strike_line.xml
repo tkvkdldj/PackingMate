@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 빈 배경: 전체 투명 처리 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <!-- 2. 중앙선 -->
+    <item android:gravity="center_vertical">
+        <shape>
+            <size android:height="1dp" />
+            <solid android:color="#AA000000" />
+        </shape>
+    </item>
+
+</layer-list>

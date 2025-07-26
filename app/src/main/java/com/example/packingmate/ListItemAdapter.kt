@@ -1,9 +1,12 @@
 package com.example.packingmate
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -34,9 +37,36 @@ class ListItemAdapter (
         holder.itemPlane.text = item.itemPlane
         holder.checkBox.isChecked = item.isChecked
 
+        val itemRoot = holder.itemView.findViewById<LinearLayout>(R.id.item_root)
+
+        if(item.isChecked){
+            itemRoot.setBackgroundResource(R.drawable.strike_line)
+        }
+        else{
+            itemRoot.setBackgroundColor(Color.TRANSPARENT)
+        }
+
+        /*텍스트 줄긋기 처리
+        if (item.isChecked) {
+            holder.itemName.paintFlags = holder.itemName.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            holder.itemPlane.paintFlags = holder.itemPlane.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        } else {
+            holder.itemName.paintFlags = holder.itemName.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.itemPlane.paintFlags = holder.itemPlane.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+        }*/
+
+
         holder.checkBox.setOnCheckedChangeListener(null)
         holder.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            item.isChecked = isChecked
             onItemCheckChanged(item, isChecked)
+
+            if(isChecked){
+                itemRoot.setBackgroundResource(R.drawable.strike_line)
+            }
+            else{
+                itemRoot.setBackgroundColor(Color.TRANSPARENT)
+            }
         }
     }
 

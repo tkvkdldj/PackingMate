@@ -35,7 +35,7 @@ class ListItemAdapter (
 
         holder.itemName.text = item.itemName
         holder.itemPlane.text = item.itemPlane
-        holder.checkBox.isChecked = item.isChecked
+        //holder.checkBox.isChecked = item.isChecked
 
         val itemRoot = holder.itemView.findViewById<LinearLayout>(R.id.item_root)
 
@@ -46,17 +46,11 @@ class ListItemAdapter (
             itemRoot.setBackgroundColor(Color.TRANSPARENT)
         }
 
-        /*텍스트 줄긋기 처리
-        if (item.isChecked) {
-            holder.itemName.paintFlags = holder.itemName.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            holder.itemPlane.paintFlags = holder.itemPlane.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-        } else {
-            holder.itemName.paintFlags = holder.itemName.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-            holder.itemPlane.paintFlags = holder.itemPlane.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-        }*/
-
-
+        //이벤트 제거
         holder.checkBox.setOnCheckedChangeListener(null)
+        //체크박스 상태 반영
+        holder.checkBox.isChecked = item.isChecked
+        //이벤트 재등록
         holder.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             item.isChecked = isChecked
             onItemCheckChanged(item, isChecked)

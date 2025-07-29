@@ -39,7 +39,6 @@ class ListDetailActivity : AppCompatActivity() {
         }
 
         val message = """
-                        이름 : ${tripInfo.userName}
                         성별 : ${gender}
                         연령 : ${tripInfo.userAge}
                         여행지: ${tripInfo.tripName}
@@ -61,6 +60,8 @@ class ListDetailActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        //supportActionBar?.title=""
 
         //tripId intent로 받아옴
         /*

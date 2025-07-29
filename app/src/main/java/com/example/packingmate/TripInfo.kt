@@ -3,7 +3,6 @@ package com.example.packingmate
 import android.content.Context
 
 data class TripInfo (
-    val userName : String,
     val userGender : Int,
     val userAge : Int,
     val tripName : String,
@@ -18,7 +17,7 @@ data class TripInfo (
 
                 val cursor = db.rawQuery(
                     """
-                    SELECT ti.userName, ti.userGender, ti.userAge, 
+                    SELECT ti.userGender, ti.userAge, 
                            ti.tripName, ti.tripStart, ti.tripEnd,
                            ts.styleName
                     FROM tripInfo ti
@@ -32,20 +31,19 @@ data class TripInfo (
 
                 if (cursor.moveToFirst()) {
                     // 첫 행에서 trip 정보 추출
-                    val userName = cursor.getString(0)
-                    val userGender = cursor.getInt(1)
-                    val userAge = cursor.getInt(2)
-                    val tripName = cursor.getString(3)
-                    val tripStart = cursor.getString(4)
-                    val tripEnd = cursor.getString(5)
+                    val userGender = cursor.getInt(0)
+                    val userAge = cursor.getInt(1)
+                    val tripName = cursor.getString(2)
+                    val tripStart = cursor.getString(3)
+                    val tripEnd = cursor.getString(4)
 
                     do {
-                        val styleName = cursor.getString(6)
+                        val styleName = cursor.getString(5)
                         if (styleName != null) styleList.add(styleName)
                     } while (cursor.moveToNext())
 
                     tripInfo = TripInfo(
-                        userName, userGender, userAge,
+                        userGender, userAge,
                         tripName, tripStart, tripEnd,
                         styleList
                     )

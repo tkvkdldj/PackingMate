@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <!-- 상단 AppBar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:title="정보 입력"
+            android:titleTextColor="@android:color/white"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:menu="@menu/menu_toolbar" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- 입력 폼 영역 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp"
+        android:paddingTop="64dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp">
+
+            <!-- 성별 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="성별"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginEnd="16dp" />
+
+                <RadioGroup
+                    android:id="@+id/genderGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <RadioButton android:id="@+id/radioMale" android:text="남성" />
+                    <RadioButton android:id="@+id/radioFemale" android:text="여성" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <!-- 연령 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="연령"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp" />
+
+                <EditText
+                    android:id="@+id/editAge"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="예) 24"
+                    android:inputType="number"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="12dp" />
+            </LinearLayout>
+
+            <!-- 여행지 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="여행지"
+                    android:textSize="16sp"
+                    android:layout_marginEnd="16dp" />
+
+                <EditText
+                    android:id="@+id/editTrip"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="예) 일본 도쿄"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="12dp" />
+            </LinearLayout>
+
+            <!-- 여행기간 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="여행기간"
+                android:textSize="16sp"
+                android:layout_marginTop="24dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/editStartDate"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="출발일"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="12dp" />
+
+                <EditText
+                    android:id="@+id/editEndDate"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:hint="도착일"
+                    android:focusable="false"
+                    android:clickable="true"
+                    android:background="@drawable/rounded_edittext"
+                    android:padding="12dp" />
+            </LinearLayout>
+
+            <!-- 여행성향 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="여행성향"
+                android:textSize="16sp"
+                android:layout_marginTop="24dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:paddingStart="4dp">
+
+                <CheckBox
+                    android:id="@+id/checkCity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="도시 관광" />
+
+                <CheckBox
+                    android:id="@+id/checkFood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="맛집 탐방" />
+
+                <CheckBox
+                    android:id="@+id/checkShopping"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="쇼핑" />
+
+                <CheckBox
+                    android:id="@+id/checkActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="액티비티" />
+            </LinearLayout>
+
+
+            <!-- 제출 버튼 -->
+            <Button
+                android:id="@+id/btnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="제출"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_button" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

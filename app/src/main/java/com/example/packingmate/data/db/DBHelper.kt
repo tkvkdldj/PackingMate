@@ -129,13 +129,20 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
             null, null, null
         )
         var tripInfo: TripInfo? = null
+
         if (cursor.moveToFirst()) {
+
+            val stylesString = cursor.getString(cursor.getColumnIndexOrThrow("styles"))
+            val stylesList = stylesString.split(",").map { it.trim() }
+
             tripInfo = TripInfo(
+                tripId = cursor.getInt(cursor.getColumnIndexOrThrow("tripId")),
                 userGender = cursor.getInt(cursor.getColumnIndexOrThrow("userGender")),
                 userAge = cursor.getInt(cursor.getColumnIndexOrThrow("userAge")),
                 tripName = cursor.getString(cursor.getColumnIndexOrThrow("tripName")),
                 tripStart = cursor.getString(cursor.getColumnIndexOrThrow("tripStart")),
-                tripEnd = cursor.getString(cursor.getColumnIndexOrThrow("tripEnd"))
+                tripEnd = cursor.getString(cursor.getColumnIndexOrThrow("tripEnd")),
+                styles = stylesList
             )
         }
         cursor.close()

@@ -1,5 +1,12 @@
 package com.example.packingmate.viewmodel
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+
+import com.example.packingmate.data.repository.TripRepository
+import com.example.packingmate.data.repository.OpenAIRepository
+
+
 class TripViewModelFactory(
     private val repository: TripRepository,
     private val openAiRepository: OpenAIRepository

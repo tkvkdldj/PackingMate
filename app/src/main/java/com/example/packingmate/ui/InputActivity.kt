@@ -88,10 +88,10 @@ class InputActivity : AppCompatActivity() {
             }
 
             Toast.makeText(this, "저장 완료!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, LoadingActivity::class.java)
-            intent.putExtra("tripId", tripId)
-            startActivity(intent)
 
+            val intent = Intent(this, LoadingActivity::class.java)
+            intent.putExtra("tripId", tripId)  // Int 타입으로 넘김
+            startActivity(intent)
             finish()
         }
     }

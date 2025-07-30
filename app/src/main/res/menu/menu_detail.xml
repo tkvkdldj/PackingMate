@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/menu_home"
+        android:title="홈으로 이동"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/menu_info"
         android:title="상세정보"
         app:showAsAction="never" />

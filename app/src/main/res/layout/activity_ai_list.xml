@@ -56,15 +56,6 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- 동적으로 EditText 추가될 영역 -->
-    <LinearLayout
-        android:id="@+id/edit_text_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:layout_marginHorizontal="16dp">
-    </LinearLayout>
 
     <!-- 추가 / 저장 버튼 -->
     <LinearLayout

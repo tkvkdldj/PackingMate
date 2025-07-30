@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import java.text.SimpleDateFormat
 
-class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", null, 1) {
+class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", null, 9) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
             CREATE TABLE tripInfo (
@@ -34,7 +34,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
                         tripId INTEGER NOT NULL,
                         itemName CHAR(50) NOT NULL,                      
                         itemPlane CHAR(10) NOT NULL CHECK (itemPlane IN 
-                        ('기내 필수','기내 권장','기내/위탁 가능','위탁 필수')),
+                        ('기내 필수','기내 권장','기내/위탁 가능','위탁 필수','사용자 추가')),
                         isChecked INTEGER NOT NULL DEFAULT 0,                    
                         isCustom INTEGER NOT NULL DEFAULT 0,  
                         FOREIGN KEY (tripId) REFERENCES tripInfo(tripId)

@@ -15,10 +15,12 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 
+        Log.d("ListActivity", "onCreate 시작됨")
         dbHelper = DBHelper(this)
         val tripListView = findViewById<ListView>(R.id.listView)
 
-        tripList = dbHelper.getAllTrips()
+        //tripList = dbHelper.getAllTrips()
+        tripList = dbHelper.getAllTrips() ?: emptyList()
         val tripTitles = tripList.map { it.title }
 
         val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, tripTitles)

@@ -1,4 +1,4 @@
-package com.example.packingmate
+package com.example.packingmate.db
 
 //여려 데이터를 끌고 다닐 모델 클래스
 /*

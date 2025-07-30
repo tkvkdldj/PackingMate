@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.packingmate.db.DBHelper
+import com.example.packingmate.db.ListItem
 
 class AIListActivity : AppCompatActivity() {
 

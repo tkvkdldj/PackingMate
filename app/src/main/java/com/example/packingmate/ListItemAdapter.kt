@@ -1,7 +1,6 @@
 package com.example.packingmate
 
 import android.graphics.Color
-import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.packingmate.db.ListItem
 
 class ListItemAdapter (
     private val itemList : List<ListItem>,

@@ -13,6 +13,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.packingmate.db.DBHelper
+import com.example.packingmate.db.ListItem
+import com.example.packingmate.db.TripInfo
 
 class ListDetailActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView

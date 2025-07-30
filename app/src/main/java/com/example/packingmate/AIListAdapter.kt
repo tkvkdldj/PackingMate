@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.packingmate.db.ListItem
 
 // 리스트 아이템 타입을 구분하기 위한 sealed class
 sealed class RecyclerItem {

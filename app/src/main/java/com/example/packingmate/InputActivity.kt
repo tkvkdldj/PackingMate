@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.packingmate.db.DBHelper
 import java.util.Calendar
 
 class InputActivity : AppCompatActivity() {

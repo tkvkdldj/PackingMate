@@ -6,6 +6,8 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.packingmate.db.DBHelper
+import com.example.packingmate.db.TripItem
 
 class ListActivity : AppCompatActivity() {
     private lateinit var dbHelper: DBHelper

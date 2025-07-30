@@ -119,4 +119,52 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
         return items
     }
 
+    fun getTripById(tripId: Long): TripInfo? {
+        val db = readableDatabase
+        val cursor = db.query(
+            "TripInfoTable",  // 실제 테이블명으로 변경
+            null,
+            "tripId = ?",
+            arrayOf(tripId.toString()),
+            null, null, null
+        )
+        var tripInfo: TripInfo? = null
+        if (cursor.moveToFirst()) {
+            tripInfo = TripInfo(
+                userGender = cursor.getInt(cursor.getColumnIndexOrThrow("userGender")),
+                userAge = cursor.getInt(cursor.getColumnIndexOrThrow("userAge")),
+                tripName = cursor.getString(cursor.getColumnIndexOrThrow("tripName")),
+                tripStart = cursor.getString(cursor.getColumnIndexOrThrow("tripStart")),
+                tripEnd = cursor.getString(cursor.getColumnIndexOrThrow("tripEnd"))
+            )
+        }
+        cursor.close()
+        return tripInfo
+    }
+
+    fun getItemsByTripId(tripId: Long): List<ListItem> {
+        val items = mutableListOf<ListItem>()
+        val db = readableDatabase
+        val cursor = db.query(
+            "listItem",  // 실제 테이블명으로 변경
+            null,
+            "tripId = ?",
+            arrayOf(tripId.toString()),
+            null, null, null
+        )
+        while (cursor.moveToNext()) {
+            val item = ListItem(
+                itemId = cursor.getInt(cursor.getColumnIndexOrThrow("itemId")),
+                tripId = cursor.getInt(cursor.getColumnIndexOrThrow("tripId")),
+                itemName = cursor.getString(cursor.getColumnIndexOrThrow("itemName")),
+                itemPlane = cursor.getString(cursor.getColumnIndexOrThrow("itemPlane")),
+                isChecked = cursor.getInt(cursor.getColumnIndexOrThrow("isChecked")) == 1,
+                isCustom = cursor.getInt(cursor.getColumnIndexOrThrow("isCustom")) == 1
+            )
+            items.add(item)
+        }
+        cursor.close()
+        return items
+    }
+
 }

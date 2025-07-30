@@ -8,6 +8,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 import com.example.packingmate.data.db.DBHelper
+import com.example.packingmate.data.db.TripInfo
+import com.example.packingmate.data.db.ListItem
+
 
 class OpenAIRepository(context: Context, private val apiKey: String) {
 
@@ -42,11 +45,11 @@ class OpenAIRepository(context: Context, private val apiKey: String) {
     }
 
     // === DBHelper 연동 메서드 추가 ===
-    fun getTripById(tripId: Long): TripInfoData? {
+    fun getTripById(tripId: Long): TripInfo? {
         return dbHelper.getTripById(tripId)
     }
 
-    fun insertTrip(trip: TripInfoData): Long {
+    fun insertTrip(trip: TripInfo): Long {
         return dbHelper.insertTripInfo(
             trip.userGender,
             trip.userAge,
@@ -56,7 +59,7 @@ class OpenAIRepository(context: Context, private val apiKey: String) {
         )
     }
 
-    fun getTripItems(tripId: Long): List<ListItemData> {
+    fun getTripItems(tripId: Long): List<ListItem> {
         return dbHelper.getItemsByTripId(tripId)
     }
 }

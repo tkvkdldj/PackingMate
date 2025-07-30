@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".AIListActivity">
+    tools:context=".ui.AIListActivity">
 
     <!-- 상단 AppBar -->
     <com.google.android.material.appbar.AppBarLayout

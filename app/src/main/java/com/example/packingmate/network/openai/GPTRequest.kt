@@ -1,4 +1,4 @@
-package com.example.packingmate.openai
+package com.example.packingmate.network.openai
 
 data class GPTResponse(
     val choices: List<Choice>

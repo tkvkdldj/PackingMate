@@ -1,4 +1,4 @@
-package com.example.packingmate.openai
+package com.example.packingmate.network.openai
 
 import retrofit2.Call
 import retrofit2.http.Body

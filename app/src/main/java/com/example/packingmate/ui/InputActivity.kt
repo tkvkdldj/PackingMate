@@ -1,4 +1,4 @@
-package com.example.packingmate
+package com.example.packingmate.ui
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -8,7 +8,8 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.example.packingmate.db.DBHelper
+import com.example.packingmate.R
+import com.example.packingmate.data.db.DBHelper
 import java.util.Calendar
 
 class InputActivity : AppCompatActivity() {

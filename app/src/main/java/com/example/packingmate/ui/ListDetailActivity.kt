@@ -1,4 +1,4 @@
-package com.example.packingmate
+package com.example.packingmate.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,9 +13,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.packingmate.db.DBHelper
-import com.example.packingmate.db.ListItem
-import com.example.packingmate.db.TripInfo
+import com.example.packingmate.R
+import com.example.packingmate.data.db.DBHelper
+import com.example.packingmate.data.db.ListItem
+import com.example.packingmate.data.db.TripInfo
+import com.example.packingmate.ui.adapter.ListItemAdapter
 
 class ListDetailActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView

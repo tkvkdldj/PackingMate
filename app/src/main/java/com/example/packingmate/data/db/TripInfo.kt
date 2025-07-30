@@ -1,4 +1,4 @@
-package com.example.packingmate.db
+package com.example.packingmate.data.db
 
 import android.content.Context
 

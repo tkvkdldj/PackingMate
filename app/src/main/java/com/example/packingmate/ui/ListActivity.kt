@@ -1,4 +1,4 @@
-package com.example.packingmate
+package com.example.packingmate.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,9 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.packingmate.db.DBHelper
-import com.example.packingmate.db.TripItem
+import com.example.packingmate.R
+import com.example.packingmate.data.db.DBHelper
+import com.example.packingmate.data.db.TripItem
 
 class ListActivity : AppCompatActivity() {
     private lateinit var dbHelper: DBHelper

@@ -1,13 +1,13 @@
-package com.example.packingmate.repository
+package com.example.packingmate.data.repository
 
 import android.content.Context
-import com.example.packingmate.openai.GPTRequest
-import com.example.packingmate.openai.Message
-import com.example.packingmate.openai.OpenAIApi
+import com.example.packingmate.network.openai.GPTRequest
+import com.example.packingmate.network.openai.Message
+import com.example.packingmate.network.openai.OpenAIApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-import com.example.packingmate.db.DBHelper
+import com.example.packingmate.data.db.DBHelper
 
 class OpenAIRepository(context: Context, private val apiKey: String) {
 

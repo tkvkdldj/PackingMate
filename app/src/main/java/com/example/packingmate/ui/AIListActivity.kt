@@ -1,4 +1,4 @@
-package com.example.packingmate
+package com.example.packingmate.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,8 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.packingmate.db.DBHelper
-import com.example.packingmate.db.ListItem
+import com.example.packingmate.R
+import com.example.packingmate.data.db.DBHelper
+import com.example.packingmate.data.db.ListItem
+import com.example.packingmate.ui.adapter.AIListAdapter
+import com.example.packingmate.ui.adapter.RecyclerItem
 
 class AIListActivity : AppCompatActivity() {
 

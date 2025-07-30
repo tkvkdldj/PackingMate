@@ -1,4 +1,4 @@
-package com.example.packingmate
+package com.example.packingmate.ui.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -8,7 +8,8 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.packingmate.db.ListItem
+import com.example.packingmate.R
+import com.example.packingmate.data.db.ListItem
 
 class ListItemAdapter (
     private val itemList : List<ListItem>,

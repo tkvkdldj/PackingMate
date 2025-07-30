@@ -1,4 +1,4 @@
-package com.example.packingmate.openai
+package com.example.packingmate.network.openai
 
 data class GPTRequest(
     val model: String = "gpt-3.5-turbo",

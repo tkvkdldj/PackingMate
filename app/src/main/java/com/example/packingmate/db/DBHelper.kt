@@ -95,4 +95,28 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
             1
         }
     }
+
+    fun getListItemsByTrip(context: Context, tripId: Int): List<ListItem> {
+        val dbHelper = SQLiteHelper(context)
+        val db = dbHelper.readableDatabase
+
+        val cursor = db.rawQuery("SELECT itemId, tripId, itemName, itemPlane, isChecked, isCustom FROM listItem WHERE tripId = ?", arrayOf(tripId.toString()))
+        val items = mutableListOf<ListItem>()
+
+        while(cursor.moveToNext()) {
+            items.add(
+                ListItem(
+                    itemId = cursor.getInt(0),
+                    tripId = cursor.getInt(1),
+                    itemName = cursor.getString(2),
+                    itemPlane = cursor.getString(3),
+                    isChecked = cursor.getInt(4) == 1,
+                    isCustom = cursor.getInt(5) == 1
+                )
+            )
+        }
+        cursor.close()
+        return items
+    }
+
 }

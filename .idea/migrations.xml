@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectMigrations">
+    <option name="MigrateToGradleLocalJavaHome">
+      <set>
+        <option value="$PROJECT_DIR$/../../../../2025 활동/GURU2/PackingMate/PackingMate" />
+      </set>
+    </option>
+  </component>
+</project>

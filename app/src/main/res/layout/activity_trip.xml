@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- 여행 이름 -->
+        <EditText
+            android:id="@+id/editTripName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:hint="여행 이름" />
+
+        <!-- 나이 -->
+        <EditText
+            android:id="@+id/editUserAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:inputType="number"
+            android:hint="나이" />
+
+        <!-- 성별 라디오 버튼 그룹 -->
+        <RadioGroup
+            android:id="@+id/radioGroupGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp">
+
+            <RadioButton
+                android:id="@+id/radioMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="남성"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radioFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="여성" />
+
+        </RadioGroup>
+
+        <!-- 여행 시작 날짜 -->
+        <EditText
+            android:id="@+id/editTripStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:hint="여행 시작 날짜 (YYYY-MM-DD)" />
+
+        <!-- 여행 끝 날짜 -->
+        <EditText
+            android:id="@+id/editTripEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:padding="12dp"
+            android:hint="여행 종료 날짜 (YYYY-MM-DD)" />
+
+        <!-- 여행 스타일 체크박스들 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="여행 스타일 선택"
+            android:paddingTop="16dp"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/checkStyleCityTour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="도시 관광" />
+
+        <CheckBox
+            android:id="@+id/checkStyleHiking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="등산" />
+
+        <CheckBox
+            android:id="@+id/checkStyleBeach"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="해변" />
+
+        <CheckBox
+            android:id="@+id/checkStyleCulture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="문화 체험" />
+
+        <!-- 제출 버튼 -->
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="여행 제출 및 준비물 생성"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+
+</ScrollView>

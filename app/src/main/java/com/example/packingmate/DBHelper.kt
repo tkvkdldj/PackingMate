@@ -28,11 +28,24 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
                 FOREIGN KEY(tripId) REFERENCES tripInfo(tripId)
             )
         """)
+
+        db.execSQL("""CREATE TABLE listItem (
+                        itemId INTEGER PRIMARY KEY AUTOINCREMENT,    
+                        tripId INTEGER NOT NULL,
+                        itemName CHAR(50) NOT NULL,                      
+                        itemPlane CHAR(10) NOT NULL CHECK (itemPlane IN 
+                        ('기내 필수','기내 권장','기내/위탁 가능','위탁 필수')),
+                        isChecked INTEGER NOT NULL DEFAULT 0,                    
+                        isCustom INTEGER NOT NULL DEFAULT 0,  
+                        FOREIGN KEY (tripId) REFERENCES tripInfo(tripId)
+                    );""".trimIndent()
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS tripStyles")
         db.execSQL("DROP TABLE IF EXISTS tripInfo")
+        db.execSQL("DROP TABLE IF EXISTS listItem")
         onCreate(db)
     }
 

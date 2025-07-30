@@ -2,6 +2,7 @@ package com.example.packingmate
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,8 +26,10 @@ class ListActivity : AppCompatActivity() {
 
         tripListView.setOnItemClickListener { _, _, position, _ ->
             val selectedTrip = tripList[position]
-            //val intent = Intent(this, ConfirmedListActivity::class.java)
-            intent.putExtra("tripId", selectedTrip.tripId)
+
+            val intent = Intent(this, ListDetailActivity::class.java)
+            intent.putExtra("tripId", selectedTrip.tripId.toInt())
+            intent.putExtra("tripTitle", selectedTrip.title)
             startActivity(intent)
         }
     }

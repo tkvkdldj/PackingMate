@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 class ListDetailActivity : AppCompatActivity() {
     lateinit var recyclerView: RecyclerView
     lateinit var adapter: ListItemAdapter
-    lateinit var dbHelper: SQLiteHelper
+    lateinit var dbHelper: DBHelper
+    lateinit var tripTitle : String
 
     //intent에서 받아올 tripId
     private var tripId: Int = -1
@@ -61,24 +63,33 @@ class ListDetailActivity : AppCompatActivity() {
             insets
         }
 
-        //supportActionBar?.title=""
+        val extras = intent.extras
+        if (extras == null) {
+            Log.e("DEBUG", "intent extras is NULL")
+        } else {
+            for (key in extras.keySet()) {
+                Log.d("DEBUG", "Intent extra: $key = ${extras.get(key)}")
+            }
+        }
+
+        tripTitle = intent.getStringExtra("tripTitle") ?: "제목 없음"
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title=tripTitle
 
         //tripId intent로 받아옴
-        /*
         tripId = intent.getIntExtra("tripId", -1)
-
         if (tripId == -1) {
             Log.e("ListDetailActivity", "tripId is missing!")
             finish()
         }
-        */
-        tripId = 1 //지금은 하드코딩
 
         //RecyclerView 연결
         recyclerView = findViewById(R.id.recycler_view)
 
-        //create문과 update문이 들어있는 새로 생성한 SQLiteHelper
-        dbHelper = SQLiteHelper(this)
+        //DB
+        dbHelper = DBHelper(this)
         val db = dbHelper.readableDatabase
 
 
@@ -96,6 +107,7 @@ class ListDetailActivity : AppCompatActivity() {
                 isCustom = cursor.getInt(cursor.getColumnIndexOrThrow("isCustom")) == 1
             )
             itemList.add(item)
+            Log.d("DEBUG_ListDatail","itemList.size = ${itemList.size}")
         }
 
         cursor.close()
@@ -113,8 +125,8 @@ class ListDetailActivity : AppCompatActivity() {
         }
 
         // RecyclerView에 어댑터와 레이아웃매니저 연결
-        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
     }
 

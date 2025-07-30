@@ -4,13 +4,13 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.text.SimpleDateFormat
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", null, 1) {
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("""
             CREATE TABLE tripInfo (
                 tripId INTEGER PRIMARY KEY AUTOINCREMENT,
-                userName CHAR(10) NOT NULL,
                 userGender INTEGER NOT NULL DEFAULT 1,
                 userAge INTEGER NOT NULL,
                 tripName CHAR(50) NOT NULL,
@@ -36,10 +36,9 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
         onCreate(db)
     }
 
-    fun insertTripInfo(name: String, gender: Int, age: Int, trip: String, start: String, end: String): Long {
+    fun insertTripInfo(gender: Int, age: Int, trip: String, start: String, end: String): Long {
         val db = writableDatabase
         val values = ContentValues().apply {
-            put("userName", name)
             put("userGender", gender)
             put("userAge", age)
             put("tripName", trip)
@@ -58,28 +57,29 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
         db.insert("tripStyles", null, values)
     }
 
-    fun getAllTrips(): List<String> {
+    fun getAllTrips(): List<TripItem> {
         val db = readableDatabase
-        val list = mutableListOf<String>()
-        val cursor = db.rawQuery("SELECT tripName, tripStart, tripEnd FROM tripInfo ORDER BY createdAt DESC", null)
+        val list = mutableListOf<TripItem>()
+        val cursor = db.rawQuery("SELECT tripId, tripName, tripStart, tripEnd FROM tripInfo ORDER BY createdAt DESC", null)
         while (cursor.moveToNext()) {
-            val name = cursor.getString(0)
-            val start = cursor.getString(1)
-            val end = cursor.getString(2)
+            val id = cursor.getLong(0)
+            val name = cursor.getString(1)
+            val start = cursor.getString(2)
+            val end = cursor.getString(3)
             val days = getTripDuration(start, end)
-            list.add("$name ${days}일 여행")
+            list.add(TripItem(id, "$name ${days}일 여행"))
         }
         cursor.close()
         return list
     }
 
     private fun getTripDuration(start: String, end: String): Int {
-        try {
-            val sdf = java.text.SimpleDateFormat("yyyy/MM/dd")
+        return try {
+            val sdf = SimpleDateFormat("yyyy/MM/dd")
             val diff = sdf.parse(end).time - sdf.parse(start).time
-            return (diff / (1000 * 60 * 60 * 24)).toInt() + 1
+            (diff / (1000 * 60 * 60 * 24)).toInt() + 1
         } catch (e: Exception) {
-            return 1
+            1
         }
     }
 }

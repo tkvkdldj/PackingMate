@@ -17,7 +17,6 @@ class InputActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input)
 
-        // 툴바 설정
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "정보 입력"
@@ -37,7 +36,6 @@ class InputActivity : AppCompatActivity() {
 
         val btnSubmit = findViewById<Button>(R.id.btnSubmit)
 
-        // 출발일 선택
         startEdit.setOnClickListener {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
@@ -52,7 +50,6 @@ class InputActivity : AppCompatActivity() {
             ).show()
         }
 
-        // 도착일 선택
         endEdit.setOnClickListener {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
@@ -74,7 +71,8 @@ class InputActivity : AppCompatActivity() {
             val startDate = startEdit.text.toString()
             val endDate = endEdit.text.toString()
 
-            val tripId = dbHelper.insertTripInfo("사용자", gender, age, tripName, startDate, endDate)
+            // name 제거됨
+            val tripId = dbHelper.insertTripInfo(gender, age, tripName, startDate, endDate)
 
             val styles = listOfNotNull(
                 if (styleCity.isChecked) "도시 관광" else null,
@@ -88,7 +86,6 @@ class InputActivity : AppCompatActivity() {
             }
 
             Toast.makeText(this, "저장 완료!", Toast.LENGTH_SHORT).show()
-
             startActivity(Intent(this, LoadingActivity::class.java))
             finish()
         }

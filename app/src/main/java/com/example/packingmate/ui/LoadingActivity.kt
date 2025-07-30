@@ -1,52 +1,65 @@
 package com.example.packingmate.ui
 
-import android.content.ContentValues
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.packingmate.R
 import com.example.packingmate.data.db.DBHelper
+import com.example.packingmate.data.db.ListItem
+import com.example.packingmate.ui.adapter.LoadingAdapter
 
 class LoadingActivity : AppCompatActivity() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: LoadingAdapter
+    private lateinit var dbHelper: DBHelper
+    private var tripId: Int = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_loading)
+        setContentView(R.layout.activity_ai_list)
 
-        val tripId = intent.getLongExtra("tripId", -1L)
+        tripId = intent.getIntExtra("tripId", -1)
+        dbHelper = DBHelper(this)
 
-        // TODO: GPT API 호출 로직 추가
-        // GPT 응답 오면 → 다음 화면으로 전환
+        recyclerView = findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        /* ai 생성리스트 더미 데이터 insert */
-        val dbHelper = DBHelper(this)
-        val db = dbHelper.writableDatabase
+        adapter = LoadingAdapter(dbHelper) {
+            loadListItems()  // 삭제 후 다시 리스트 로드
+        }
+        recyclerView.adapter = adapter
 
-        val dummyItems = listOf(
-            "여권" to "기내 필수",
-            "항공권" to "기내 필수",
-            "보조 배터리" to "기내 필수"
+        loadListItems()
+    }
+
+    private fun loadListItems() {
+        val db = dbHelper.readableDatabase
+        val cursor = db.query(
+            "listItem",
+            null,
+            "tripId = ?",
+            arrayOf(tripId.toString()),
+            null, null, null
         )
 
-        dummyItems.forEach { (name, plane) ->
-            val values = ContentValues().apply {
-                put("tripId", tripId)
-                put("itemName", name)
-                put("itemPlane", plane)
-                put("isChecked", 0)
-                put("isCustom", 0)
-            }
-            db.insert("listItem", null, values)
+        val items = mutableListOf<ListItem>()
+        while (cursor.moveToNext()) {
+            val item = ListItem(
+                itemId = cursor.getInt(cursor.getColumnIndexOrThrow("itemId")),
+                tripId = cursor.getInt(cursor.getColumnIndexOrThrow("tripId")),
+                itemName = cursor.getString(cursor.getColumnIndexOrThrow("itemName")),
+                itemPlane = cursor.getString(cursor.getColumnIndexOrThrow("itemPlane")),
+                isChecked = cursor.getInt(cursor.getColumnIndexOrThrow("isChecked")) == 1,
+                isCustom = cursor.getInt(cursor.getColumnIndexOrThrow("isCustom")) == 1
+            )
+            items.add(item)
         }
+        cursor.close()
 
-        // 예시: 3초 후 다음 화면 이동 (테스트용)
-        Handler(Looper.getMainLooper()).postDelayed({
-            val aiIntent = Intent(this, AIListActivity::class.java)
-            aiIntent.putExtra("tripId", tripId)
-            startActivity(aiIntent)
-
-            finish()
-        }, 3000) // 3초
+        adapter.submitList(items)
     }
 }
+
+

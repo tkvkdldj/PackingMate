@@ -23,6 +23,10 @@ class LoadingActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: LoadingAdapter
+
+    private val apiKey = BuildConfig.OPENAI_API_KEY
+    private lateinit var openAIRepository: OpenAIRepository
+
     private lateinit var dbHelper: DBHelper
     private lateinit var viewModel: TripViewModel
     private var tripId: Long = -1L

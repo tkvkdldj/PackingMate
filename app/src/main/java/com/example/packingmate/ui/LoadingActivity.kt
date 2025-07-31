@@ -1,97 +1,89 @@
 package com.example.packingmate.ui
 
+import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.packingmate.BuildConfig
+
 import com.example.packingmate.R
 import com.example.packingmate.data.db.DBHelper
-import com.example.packingmate.data.db.ListItem
 import com.example.packingmate.data.repository.OpenAIRepository
 
-import com.example.packingmate.viewmodel.TripViewModel
-import com.example.packingmate.viewmodel.TripViewModelFactory
-import com.example.packingmate.ui.adapter.LoadingAdapter
 
 class LoadingActivity : AppCompatActivity() {
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: LoadingAdapter
-
     private val apiKey = BuildConfig.OPENAI_API_KEY
     private lateinit var openAIRepository: OpenAIRepository
-
     private lateinit var dbHelper: DBHelper
-    private lateinit var viewModel: TripViewModel
-    private var tripId: Long = -1L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ai_list)
+        setContentView(R.layout.activity_loading)
 
         val tripId = intent.getLongExtra("tripId", -1L)
+        if (tripId == -1L) {
+            // tripId 없으면 에러 처리
+            finish()
+            return
+        }
+
+        openAIRepository = OpenAIRepository(this, apiKey)
         dbHelper = DBHelper(this)
 
-        // GPT Repository + ViewModel
-        val apiKey = BuildConfig.OPENAI_API_KEY
-        val openAiRepository = OpenAIRepository(this, apiKey)
-        val factory = TripViewModelFactory(openAiRepository, dbHelper)
-        viewModel = ViewModelProvider(this, factory).get(TripViewModel::class.java)
-
-        recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        adapter = LoadingAdapter(dbHelper) {
-            loadListItems()
-        }
-        recyclerView.adapter = adapter
-
-        lifecycleScope.launch {
-            val tripInfo = dbHelper.getTripById(tripId)
-            if (tripInfo == null) {
-                Log.e("LoadingActivity", "tripInfo 불러오기 실패: tripId=$tripId")
-                Toast.makeText(this@LoadingActivity, "여행 정보를 불러올 수 없습니다.", Toast.LENGTH_LONG).show()
-                return@launch
-            }
-            Log.d("LoadingActivity", "불러온 tripInfo: $tripInfo")
-            viewModel.generatePackingList(tripId)
-            loadListItems()
-        }
+        // GPT 호출하고 DB에 저장 후 화면 전환
+        fetchAndSavePackingList(tripId)
     }
 
-    private fun loadListItems() {
-        val db = dbHelper.readableDatabase
-        val cursor = db.query(
-            "listItem",
-            null,
-            "tripId = ?",
-            arrayOf(tripId.toString()),
-            null, null, null
-        )
+    private fun fetchAndSavePackingList(tripId: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // 1) 여행 정보 가져오기 (DB에서)
+                val trip = dbHelper.getTripById(tripId)
+                if (trip == null) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@LoadingActivity, "여행 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    return@launch
+                }
 
-        val items = mutableListOf<ListItem>()
-        while (cursor.moveToNext()) {
-            val item = ListItem(
-                itemId = cursor.getInt(cursor.getColumnIndexOrThrow("itemId")),
-                tripId = cursor.getInt(cursor.getColumnIndexOrThrow("tripId")),
-                itemName = cursor.getString(cursor.getColumnIndexOrThrow("itemName")),
-                itemPlane = cursor.getString(cursor.getColumnIndexOrThrow("itemPlane")),
-                isChecked = cursor.getInt(cursor.getColumnIndexOrThrow("isChecked")) == 1,
-                isCustom = cursor.getInt(cursor.getColumnIndexOrThrow("isCustom")) == 1
-            )
-            items.add(item)
+                // 2) 여행 정보 기반 프롬프트 만들기
+                val prompt = "성별: ${trip.userGender}, 나이: ${trip.userAge}, 여행명: ${trip.tripName}, " +
+                        "기간: ${trip.tripStart}부터 ${trip.tripEnd}까지 여행 준비물 리스트를 알려줘."
+
+                // 3) GPT 호출해서 아이템 리스트 받아오기
+                val items = openAIRepository.getPackingListFromGPT(prompt)
+
+                // 4) DB에 아이템들 삽입
+                val db = dbHelper.writableDatabase
+                items.forEach { itemName ->
+                    val values = ContentValues().apply {
+                        put("tripId", tripId)
+                        put("itemName", itemName)
+                        put("itemPlane", "기내 필수")  // 필요시 바꾸기
+                        put("isChecked", 0)
+                        put("isCustom", 0)
+                    }
+                    db.insert("listItem", null, values)
+                }
+
+                // 5) 메인 스레드에서 화면 전환
+                withContext(Dispatchers.Main) {
+                    val aiIntent = Intent(this@LoadingActivity, AIListActivity::class.java)
+                    aiIntent.putExtra("tripId", tripId)
+                    startActivity(aiIntent)
+                    finish()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@LoadingActivity, "데이터를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
         }
-        cursor.close()
-
-        adapter.submitList(items)
     }
 }
-
-
-

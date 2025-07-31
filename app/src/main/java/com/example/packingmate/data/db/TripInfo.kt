@@ -3,7 +3,6 @@ package com.example.packingmate.data.db
 import android.content.Context
 
 data class TripInfo (
-    val tripId: Int,    // 추가
     val userGender: Int,
     val userAge: Int,
     val tripName: String,
@@ -31,7 +30,6 @@ data class TripInfo (
             val styleList = mutableListOf<String>()
 
             if (cursor.moveToFirst()) {
-                val id = cursor.getInt(0)
                 val userGender = cursor.getInt(1)
                 val userAge = cursor.getInt(2)
                 val tripName = cursor.getString(3)
@@ -44,7 +42,7 @@ data class TripInfo (
                 } while (cursor.moveToNext())
 
                 tripInfo = TripInfo(
-                    id, userGender, userAge,
+                    userGender, userAge,
                     tripName, tripStart, tripEnd,
                     styleList
                 )

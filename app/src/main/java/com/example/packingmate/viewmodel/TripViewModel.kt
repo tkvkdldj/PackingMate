@@ -1,14 +1,28 @@
 package com.example.packingmate.viewmodel
 
+import android.content.ContentValues
 import androidx.lifecycle.ViewModel
-import com.example.packingmate.data.repository.TripRepository
+import com.example.packingmate.data.db.DBHelper
 import com.example.packingmate.data.repository.OpenAIRepository
 import com.example.packingmate.data.db.TripInfo
 
 class TripViewModel(
-    private val repository: TripRepository,
-    private val openAiRepository: OpenAIRepository
+    private val openAiRepository: OpenAIRepository,
+    private val dbHelper: DBHelper
 ) : ViewModel() {
+
+    suspend fun generatePackingList(tripId: Long) {
+        val tripInfo = dbHelper.getTripById(tripId)
+            ?: throw IllegalStateException("Trip not found: $tripId")
+
+        val prompt = buildPrompt(tripInfo, tripInfo.styles)
+        val packingList = openAiRepository.getPackingListFromGPT(prompt)
+
+        packingList.forEach { item ->
+            dbHelper.insertListItem(tripId, item)
+        }
+    }
+
 
     private fun buildPrompt(tripInfo: TripInfo, tripStyles: List<String>): String {
         val styles = tripStyles.joinToString(", ")
@@ -29,13 +43,13 @@ class TripViewModel(
     suspend fun submitTripAndGetPackingList(
         tripInfo: TripInfo,
         tripStyles: List<String>
-    ): Int {
+    ): Long {
         // trip 저장
-        val tripId = repository.insertTripInfo(tripInfo)
+        val tripId = dbHelper.insertTripInfo(tripInfo)
 
         // 스타일 저장
         tripStyles.forEach { style ->
-            repository.insertTripStyle(tripId, style)
+            dbHelper.insertTripStyle(tripId, style)
         }
 
         // GPT 호출
@@ -44,9 +58,10 @@ class TripViewModel(
 
         // 리스트 저장
         packingList.forEach { itemName ->
-            repository.insertListItem(tripId, itemName)
+            dbHelper.insertListItem(tripId, itemName)
         }
 
         return tripId
     }
+
 }

@@ -3,6 +3,7 @@ package com.example.packingmate.ui
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
@@ -73,7 +74,7 @@ class InputActivity : AppCompatActivity() {
             val startDate = startEdit.text.toString()
             val endDate = endEdit.text.toString()
 
-            // name 제거됨
+            Log.d("InputActivity", "입력값: gender=$gender, age=$age, tripName=$tripName, start=$startDate, end=$endDate")
             val tripId = dbHelper.insertTripInfo(gender, age, tripName, startDate, endDate)
 
             val styles = listOfNotNull(
@@ -90,7 +91,7 @@ class InputActivity : AppCompatActivity() {
             Toast.makeText(this, "저장 완료!", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(this, LoadingActivity::class.java)
-            intent.putExtra("tripId", tripId)  // Int 타입으로 넘김
+            intent.putExtra("tripId", tripId)
             startActivity(intent)
             finish()
         }

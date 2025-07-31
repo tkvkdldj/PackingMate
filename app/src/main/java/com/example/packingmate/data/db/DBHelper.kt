@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import java.text.SimpleDateFormat
 
 class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", null, 9) {
@@ -50,6 +51,11 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
     }
 
     fun insertTripInfo(gender: Int, age: Int, trip: String, start: String, end: String): Long {
+        if (trip.isBlank() || age <= 0) {
+            Log.e("DBHelper", "insertTripInfo failed: invalid data. trip='$trip', age=$age")
+            return -1
+        }
+
         val db = writableDatabase
         val values = ContentValues().apply {
             put("userGender", gender)
@@ -58,16 +64,16 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
             put("tripStart", start)
             put("tripEnd", end)
         }
-        return db.insert("tripInfo", null, values)
-    }
 
-    fun insertTripStyle(tripId: Long, style: String) {
-        val db = writableDatabase
-        val values = ContentValues().apply {
-            put("tripId", tripId)
-            put("styleName", style)
+        val rowId = db.insert("tripInfo", null, values)
+
+        if (rowId == -1L) {
+            Log.e("DBHelper", "insertTripInfo failed. values=$values")
+        } else {
+            Log.d("DBHelper", "insertTripInfo succeeded: rowId=$rowId, values=$values")
         }
-        db.insert("tripStyles", null, values)
+
+        return rowId
     }
 
     fun getAllTrips(): List<TripItem> {
@@ -122,27 +128,21 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
     fun getTripById(tripId: Long): TripInfo? {
         val db = readableDatabase
         val cursor = db.query(
-            "TripInfoTable",  // 실제 테이블명으로 변경
+            "tripInfo",
             null,
             "tripId = ?",
             arrayOf(tripId.toString()),
             null, null, null
         )
         var tripInfo: TripInfo? = null
-
         if (cursor.moveToFirst()) {
-
-            val stylesString = cursor.getString(cursor.getColumnIndexOrThrow("styles"))
-            val stylesList = stylesString.split(",").map { it.trim() }
-
             tripInfo = TripInfo(
-                tripId = cursor.getInt(cursor.getColumnIndexOrThrow("tripId")),
                 userGender = cursor.getInt(cursor.getColumnIndexOrThrow("userGender")),
                 userAge = cursor.getInt(cursor.getColumnIndexOrThrow("userAge")),
                 tripName = cursor.getString(cursor.getColumnIndexOrThrow("tripName")),
                 tripStart = cursor.getString(cursor.getColumnIndexOrThrow("tripStart")),
                 tripEnd = cursor.getString(cursor.getColumnIndexOrThrow("tripEnd")),
-                styles = stylesList
+                styles = getTripStyles(tripId.toInt())
             )
         }
         cursor.close()
@@ -173,5 +173,86 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "packingMateDB", nu
         cursor.close()
         return items
     }
+
+    fun insertTripInfo(tripInfo: TripInfo): Long {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("tripName", tripInfo.tripName)
+            put("tripStart", tripInfo.tripStart)
+            put("tripEnd", tripInfo.tripEnd)
+        }
+        return db.insert("tripInfo", null, values) // Long 그대로 반환
+    }
+
+    fun insertTripStyle(tripId: Long, style: String) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("tripId", tripId)
+            put("styleName", style)
+        }
+        db.insert("tripStyles", null, values)
+    }
+
+    fun insertListItem(tripId: Long, itemName: String) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("tripId", tripId)
+            put("itemName", itemName)
+            put("isChecked", 0)
+            put("isCustom", 0)
+        }
+        db.insert("listItem", null, values)
+    }
+
+    fun getTripInfo(tripId: Int): TripInfo {
+        val db = readableDatabase
+
+        val cursor = db.query(
+            "tripInfo",
+            null,
+            "tripId = ?",
+            arrayOf(tripId.toString()),
+            null, null, null
+        )
+
+        var tripInfo: TripInfo? = null
+        if (cursor.moveToFirst()) {
+            val userGender = cursor.getInt(cursor.getColumnIndexOrThrow("userGender"))
+            val userAge = cursor.getInt(cursor.getColumnIndexOrThrow("userAge"))
+            val tripName = cursor.getString(cursor.getColumnIndexOrThrow("tripName"))
+            val tripStart = cursor.getString(cursor.getColumnIndexOrThrow("tripStart"))
+            val tripEnd = cursor.getString(cursor.getColumnIndexOrThrow("tripEnd"))
+            cursor.close()
+
+            val styles = getTripStyles(tripId)  // 스타일 리스트 따로 불러오기
+
+            tripInfo = TripInfo(userGender, userAge, tripName, tripStart, tripEnd, styles)
+        } else {
+            cursor.close()
+            throw Exception("TripInfo not found for tripId: $tripId")
+        }
+
+        return tripInfo
+    }
+
+
+    fun getTripStyles(tripId: Int): List<String> {
+        val db = readableDatabase
+        val cursor = db.query(
+            "tripStyles",
+            arrayOf("styleName"),
+            "tripId = ?",
+            arrayOf(tripId.toString()),
+            null, null, null
+        )
+
+        val styles = mutableListOf<String>()
+        while (cursor.moveToNext()) {
+            styles.add(cursor.getString(cursor.getColumnIndexOrThrow("styleName")))
+        }
+        cursor.close()
+        return styles
+    }
+
 
 }
